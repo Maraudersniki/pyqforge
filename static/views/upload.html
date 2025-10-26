@@ -1,0 +1,46 @@
+<div class="py-12">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Upload a Question Paper</h2>
+    
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl max-w-2xl mx-auto">
+        
+        <div class="space-y-6">
+            <!-- Title Input -->
+            <div>
+                <label for="paper-title" class="block text-sm font-medium text-gray-700">Paper Title (e.g., CS-401 Mid-Term 2023)</label>
+                <input type="text" id="paper-title" placeholder="Enter paper title"
+                       class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <!-- File Input -->
+            <div>
+                <label for="file-input" class="block text-sm font-medium text-gray-700">Select PDF File (Must be clear text)</label>
+                <input type="file" id="file-input" accept="application/pdf"
+                       class="mt-1 block w-full text-sm text-gray-500 
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-lg file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-indigo-50 file:text-indigo-700
+                              hover:file:bg-indigo-100">
+                <p class="mt-2 text-xs text-gray-500">Only PDF files are accepted for AI extraction.</p>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <p id="upload-status" class="mt-6 text-sm text-indigo-600 font-semibold hidden">
+            <span class="spinner"></span> Processing...
+        </p>
+
+        <!-- Submit Button -->
+        <div class="mt-6">
+            <button id="upload-button" onclick="handleFileUpload()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-150 shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                🧠 Upload & Process with AI
+            </button>
+        </div>
+        
+    </div>
+
+    <p class="text-center text-sm text-gray-500 mt-8 max-w-2xl mx-auto">
+        The AI process (extraction) is the most resource-intensive step. It converts your PDF, calls the Gemini API, and saves the structured data to your Flask/SQL database.
+    </p>
+</div>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Bank Builder</title>
+    <!-- Tailwind CSS CDN - Fast and easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            width: 1.2rem;
+            height: 1.2rem;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .view-content {
+            min-height: calc(100vh - 8rem);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="space-y-2"></div>
+
+    <!-- Main Navigation/Header -->
+    <header id="main-header" class="bg-indigo-800 shadow-lg hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold text-white tracking-tight">PyQForge</h1>
+            <div class="flex items-center space-x-4">
+                <nav id="main-nav" class="flex space-x-2 sm:space-x-4">
+                    <button class="nav-button p-2 rounded-lg text-indigo-200 hover:bg-indigo-600 transition duration-150" data-view="dashboard-view" onclick="switchView('dashboard-view')">Dashboard</button>
+                    <button class="nav-button p-2 rounded-lg text-indigo-200 hover:bg-indigo-600 transition duration-150" data-view="upload-view" onclick="switchView('upload-view')">Upload Paper</button>
+                    <button class="nav-button p-2 rounded-lg text-indigo-200 hover:bg-indigo-600 transition duration-150" data-view="banks-view" onclick="switchView('banks-view')">My Question Banks</button>
+                </nav>
+            </div>
+            <p id="user-id-display" class="text-sm text-indigo-300">User ID: N/A</p>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <!-- Container for all dynamically loaded views -->
+        <div id="views-container" class="relative">
+
+            <!-- CRITICAL FIX: The Landing View must be present in index.html -->
+            <div id="landing-view" class="view-content flex flex-col items-center justify-center min-h-[50vh] text-center">
+                <h2 class="text-4xl font-extrabold text-indigo-800 mb-4">Welcome to PyQForge</h2>
+                <p class="text-gray-600 text-lg mb-8">Your AI-powered question bank builder.</p>
+                <div class="space-y-4">
+                    <!-- CRITICAL FIX: Re-introducing onclick but the function is globally registered in JS -->
+                    <button id="start-session-btn" onclick="window.setUserIdFromLanding()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-150 transform hover:scale-105">
+                        🚀 Try Without Login
+                    </button>
+                    <p class="text-sm text-gray-500">or</p>
+                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-full transition duration-150 cursor-not-allowed" disabled>
+                        🔐 Log In / Sign Up (Future Feature)
+                    </button>
+                </div>
+            </div>
+            <!-- Dynamic view injection happens after this -->
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 mt-10 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            BCA Project Prototype | Stack: HTML, JS, Tailwind + Flask/SQLAlchemy.
+            <p class="mt-1 text-red-600 font-semibold">NOTE: Flask Server must be running on http://127.0.0.1:5001/ for data to save.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <!-- These files contain all the application logic -->
+    <script type="module" src="static/js/core.js"></script>
+    <script type="module" src="static/js/ui.js"></script>
+    <script type="module" src="static/js/api.js"></script>
+</body>
+</html>
