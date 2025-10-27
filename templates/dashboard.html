@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ExamForge Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+
+</head>
+<body>
+<nav class="relative bg-gray-800">
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+<div class="relative flex h-16 items-center justify-between">
+<div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+<!-- Mobile menu button-->
+<button type="button" command="--toggle" commandfor="mobile-menu" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
+<span class="absolute -inset-0.5"></span>
+<span class="sr-only">Open main menu</span>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 in-aria-expanded:hidden">
+<path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 not-in-aria-expanded:hidden">
+<path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</button>
+</div>
+<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+<div class="flex shrink-0 items-center">
+
+<!--img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_W_YGeWzeLOq7OXmxnl9fgkArxT-xbQ1e8g&s" alt="Your Company" class="h-8 w-auto" -->
+</div>
+<div class=" sm:ml-6 sm:block">
+<div class="flex space-x-4">
+<!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
+ <a href="{{ url_for('index') }}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</a>
+
+<a href="" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Dashboard</a>
+
+<a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">About</a>
+<a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Contact</a>
+</div>
+</div>
+</div>
+<div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <button type="button" class="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+          <span class="absolute -inset-1.5"></span>
+          <span class="sr-only">View notifications</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+            <path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <!-- Profile dropdown -->
+        <el-dropdown class="relative ml-3">
+          <button class="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+            <span class="absolute -inset-1.5"></span>
+            <span class="sr-only">Open user menu</span>
+            <img src="data:image/jpeg;base64,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" alt="" class="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
+          </button>
+
+          <el-menu anchor="bottom" placement="center" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Your profile</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Settings</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
+          </el-menu>
+        </el-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <el-disclosure id="mobile-menu" hidden class="block sm:hidden">
+    <div class="space-y-1 px-2 pt-2 pb-3">
+      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
+      <a href="#" aria-current="page" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">Dashboard</a>
+      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Team</a>
+      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Projects</a>
+      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">Calendar</a>
+    </div>
+  </el-disclosure>
+</nav>
+  </head>
+  <body class="bg-white min-h-screen text-gray-800">
+    <!-- Navbar
+    <nav class="flex items-center justify-between p-4 shadow-sm">
+      <div class="flex items-center gap-2">
+        Hamburger 
+        <button class="p-2 bg-gray-200 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.75h16.5m-16.5 6h16.5m-16.5 6h16.5" />
+          </svg>
+        </button>
+        <h1 class="text-xl font-semibold text-gray-700">Dashboard</h1>
+      </div> -->
+
+      <!--<div class="flex items-center gap-4">
+        <span class="flex items-center gap-1 text-sm font-medium text-amber-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.062 3.266a1 1 0 00.95.69h3.433c.969 0 1.371 1.24.588 1.81l-2.776 2.018a1 1 0 00-.364 1.118l1.062 3.266c.3.921-.755 1.688-1.54 1.118l-2.776-2.018a1 1 0 00-1.176 0l-2.776 2.018c-.784.57-1.838-.197-1.54-1.118l1.062-3.266a1 1 0 00-.364-1.118L2.466 8.693c-.783-.57-.38-1.81.588-1.81h3.433a1 1 0 00.95-.69l1.062-3.266z"/>
+          </svg>
+        </span>
+        <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white font-semibold">
+          H
+        </div>
+      </div>
+    </nav>-->
+
+<main class="flex flex-col items-center text-center mt-10">
+  <h2 class="text-3xl font-bold">Welcome, User!</h2>
+  <p class="mt-2 text-gray-600">
+    Craft Success, One Test at a Time with 
+    <span class="font-semibold text-indigo-600">ExamForge</span> 🔥
+  </p>
+
+  <!-- 🟨 Cards Grid Section -->
+  <div class="grid grid-cols-2 gap-4 mt-10 max-w-sm">
+    <!-- Flashcards -->
+    <a href="{{ url_for('banks') }}" class="bg-yellow-50 hover:bg-yellow-100 active:scale-95 rounded-xl shadow p-5 transition">
+      <div class="text-yellow-500 text-3xl mb-2">📘</div>
+      <h3 class="font-semibold text-lg">View Question Banks</h3>
+      <p class="text-sm text-gray-500">Study</p>
+    </a>
+
+    <!-- Exams -->
+    <button class="bg-green-50 hover:bg-green-100 active:scale-95 rounded-xl shadow p-5 transition">
+      <div class="text-green-500 text-3xl mb-2">❓</div>
+      <h3 class="font-semibold text-lg">EXAMS</h3>
+      <p class="text-sm text-gray-500">Practice</p>
+    </button>
+
+    <!-- Analytics -->
+    <button class="bg-purple-50 hover:bg-purple-100 active:scale-95 rounded-xl shadow p-5 transition">
+      <div class="text-purple-500 text-3xl mb-2">📊</div>
+      <h3 class="font-semibold text-lg">ANALYTICS</h3>
+      <p class="text-sm text-gray-500">Coming Soon!</p>
+    </button>
+
+    <!-- Create -->
+    <a href="{{ url_for('upload') }}" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl shadow p-5 transition">
+      <div class="text-3xl mb-2">➕</div>
+      <h3 class="font-semibold text-lg">CREATE</h3>
+      <p class="text-sm">Start</p>
+    </a>
+  </div>
+
+  <h4 class="mt-10 text-lg font-medium text-gray-700">Latest Activity</h4>
+</main>

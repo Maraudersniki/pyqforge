@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Question Banks</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    
+
+<!-- Breadcrumb -->
+
+
+<!-- Breadcrumb -->
+<!-- Light Mode Breadcrumb -->
+<nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-2">
+    <li class="inline-flex items-center">
+      <a href="{{ url_for('index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+        <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+        </svg>
+        Home
+      </a>
+    </li>
+    <li>
+      <div class="flex items-center">
+        <svg class="block w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+        </svg>
+        <a href="{{ url_for('dashboard') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2">Dashboard</a>
+      </div>
+    </li>
+    <li aria-current="page">
+      <div class="flex items-center">
+        <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+        </svg>
+       <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2">Question Banks</span>
+      </div>
+    </li>
+  </ol>
+</nav>
+
+
+
+  <h1 class="text-2xl font-bold mb-6">📘 Question Banks</h1>
+
+  <div id="bankList" class="space-y-3"></div>
+
+  <div id="questionsView" class="hidden mt-8">
+    <button id="backBtn" class="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-1 rounded">← Back to Banks</button>
+    <h2 id="bankTitle" class="text-xl font-semibold mb-4"></h2>
+
+    <table class="table-auto w-full border border-gray-300 bg-white rounded-lg shadow-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left">Section</th>
+          <th class="px-4 py-2 text-left">Question</th>
+          <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="questionsTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Modal for Upload Answer -->
+  <div id="answerModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="bg-white w-11/12 md:w-1/2 p-6 rounded-lg shadow-lg relative">
+      <h3 class="text-lg font-semibold mb-4">Upload Answer</h3>
+      
+      <div class="flex items-center gap-3 mb-3">
+        <button id="textMode" class="p-2 border rounded bg-gray-100">📝 Text</button>
+        <button id="imageMode" class="p-2 border rounded">🖼️ Image</button>
+      </div>
+
+      <div id="textEditor">
+        <textarea id="answerText" class="w-full border rounded p-2 h-32 focus:outline-none" placeholder="Write your answer here..."></textarea>
+      </div>
+
+      <div id="imageUploader" class="hidden">
+        <input type="file" id="answerImage" accept="image/*" class="mb-2">
+        <img id="previewImg" class="hidden w-full max-h-60 object-contain border rounded" />
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button id="cancelBtn" class="bg-gray-300 hover:bg-gray-400 px-4 py-1 rounded">Cancel</button>
+        <button id="saveBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questionBanks = [
+      {
+        id: 1,
+        title: "Python Midterm 2024",
+        questions: [
+          { id: 1, section: "A", question: "What is Python?", has_answer: false },
+          { id: 2, section: "A", question: "Explain Flask architecture.", has_answer: true },
+          { id: 3, section: "B", question: "Differentiate list and tuple.", has_answer: false }
+        ]
+      }
+    ];
+
+    const bankList = document.getElementById("bankList");
+    const questionsView = document.getElementById("questionsView");
+    const questionsTable = document.getElementById("questionsTable");
+    const bankTitle = document.getElementById("bankTitle");
+    const backBtn = document.getElementById("backBtn");
+
+    const modal = document.getElementById("answerModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const textMode = document.getElementById("textMode");
+    const imageMode = document.getElementById("imageMode");
+    const textEditor = document.getElementById("textEditor");
+    const imageUploader = document.getElementById("imageUploader");
+    const previewImg = document.getElementById("previewImg");
+    const answerImage = document.getElementById("answerImage");
+
+    let currentBank = null;
+    let currentQuestion = null;
+
+    function loadBanks() {
+      bankList.innerHTML = "";
+      questionsView.classList.add("hidden");
+      questionBanks.forEach(bank => {
+        const div = document.createElement("div");
+        div.className = "p-4 bg-white rounded-lg shadow-sm border cursor-pointer hover:bg-gray-50";
+        div.innerHTML = `
+          <h2 class="font-semibold text-lg">${bank.title}</h2>
+          <p class="text-sm text-gray-500">${bank.questions.length} questions</p>
+        `;
+        div.onclick = () => openBank(bank.id);
+        bankList.appendChild(div);
+      });
+    }
+
+    function openBank(bankId) {
+      currentBank = questionBanks.find(b => b.id === bankId);
+      if (!currentBank) return;
+      bankList.classList.add("hidden");
+      questionsView.classList.remove("hidden");
+      bankTitle.textContent = currentBank.title;
+      renderQuestions(currentBank.questions);
+    }
+
+    function renderQuestions(questions) {
+      questionsTable.innerHTML = "";
+      let currentSection = "";
+      questions.forEach(q => {
+        if (q.section !== currentSection) {
+          currentSection = q.section;
+          const sectionRow = document.createElement("tr");
+          sectionRow.innerHTML = `<td colspan="3" class="bg-blue-50 font-semibold px-4 py-2 text-blue-800">Section ${q.section}</td>`;
+          questionsTable.appendChild(sectionRow);
+        }
+
+        const row = document.createElement("tr");
+        row.classList.add("border-t");
+        row.innerHTML = `
+          <td class="px-4 py-2">${q.section}</td>
+          <td class="px-4 py-2" id="question-${q.id}">${q.question}</td>
+          <td class="px-4 py-2 space-x-2">
+            <button onclick="editQuestion(${q.id})" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">Edit</button>
+            <button onclick="openAnswerModal(${q.id})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Upload Answer</button>
+            <button class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Generate AI Answer</button>
+          </td>
+        `;
+        questionsTable.appendChild(row);
+      });
+    }
+
+    function editQuestion(id) {
+      const question = currentBank.questions.find(q => q.id === id);
+      const newText = prompt("Edit Question:", question.question);
+      if (newText) {
+        question.question = newText;
+        document.getElementById(`question-${id}`).innerText = newText;
+      }
+    }
+
+    // Mini Editor Logic
+    function openAnswerModal(id) {
+      currentQuestion = id;
+      modal.classList.remove("hidden");
+      textEditor.classList.remove("hidden");
+      imageUploader.classList.add("hidden");
+      textMode.classList.add("bg-gray-100");
+      imageMode.classList.remove("bg-gray-100");
+    }
+
+    cancelBtn.onclick = () => modal.classList.add("hidden");
+
+    saveBtn.onclick = () => {
+      alert("Answer saved (mock)!");
+      modal.classList.add("hidden");
+    };
+
+    textMode.onclick = () => {
+      textEditor.classList.remove("hidden");
+      imageUploader.classList.add("hidden");
+      textMode.classList.add("bg-gray-100");
+      imageMode.classList.remove("bg-gray-100");
+    };
+
+    imageMode.onclick = () => {
+      textEditor.classList.add("hidden");
+      imageUploader.classList.remove("hidden");
+      imageMode.classList.add("bg-gray-100");
+      textMode.classList.remove("bg-gray-100");
+    };
+
+    answerImage.onchange = e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          previewImg.src = reader.result;
+          previewImg.classList.remove("hidden");
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    backBtn.onclick = () => {
+      bankList.classList.remove("hidden");
+      questionsView.classList.add("hidden");
+    };
+
+    loadBanks();
+  </script>
+
+</body>
+</html>

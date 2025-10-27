@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ExamForge Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white min-h-screen text-gray-800 transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between p-4 shadow-md relative">
+      <div class="flex items-center gap-2">
+        <!-- Hamburger -->
+        <button id="menuBtn" class="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+               stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M3.75 5.75h16.5m-16.5 6h16.5m-16.5 6h16.5" />
+          </svg>
+        </button>
+        <h1 class="text-xl font-semibold text-gray-700">Dashboard</h1>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1 text-sm font-medium text-amber-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" 
+               class="w-4 h-4" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.062 3.266a1 
+                     1 0 00.95.69h3.433c.969 0 1.371 1.24.588 
+                     1.81l-2.776 2.018a1 1 0 
+                     00-.364 1.118l1.062 3.266c.3.921-.755 
+                     1.688-1.54 1.118l-2.776-2.018a1 1 0 
+                     00-1.176 0l-2.776 2.018c-.784.57-1.838-.197-1.54-1.118l1.062-3.266a1 
+                     1 0 00-.364-1.118L2.466 8.693c-.783-.57-.38-1.81.588-1.81h3.433a1 
+                     1 0 00.95-.69l1.062-3.266z"/>
+          </svg>
+          Bronze
+        </span>
+        <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white font-semibold cursor-pointer hover:scale-110 transition" title="Profile">
+          H
+        </div>
+      </div>
+
+      <!-- Side Menu -->
+      <div id="sideMenu" class="hidden absolute top-14 left-4 bg-white shadow-lg rounded-lg w-40 py-2">
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex flex-col items-center text-center mt-10">
+      <h2 class="text-3xl font-bold">Welcome, Hannie4!</h2>
+      <p class="mt-2 text-gray-600">
+        Craft Success, One Test at a Time with 
+        <span class="font-semibold text-indigo-600">ExamForge</span> 🔥
+      </p>
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-2 gap-4 mt-10 max-w-sm">
+        <!-- Flashcards -->
+        <button class="bg-yellow-50 hover:bg-yellow-100 active:scale-95 rounded-xl shadow p-5 transition">
+          <div class="text-yellow-500 text-3xl mb-2">📘</div>
+          <h3 class="font-semibold text-lg">FLASHCARDS</h3>
+          <p class="text-sm text-gray-500">Study</p>
+        </button>
+
+        <!-- Exams -->
+        <button class="bg-green-50 hover:bg-green-100 active:scale-95 rounded-xl shadow p-5 transition">
+          <div class="text-green-500 text-3xl mb-2">❓</div>
+          <h3 class="font-semibold text-lg">EXAMS</h3>
+          <p class="text-sm text-gray-500">Practice</p>
+        </button>
+
+        <!-- Analytics -->
+        <button class="bg-purple-50 hover:bg-purple-100 active:scale-95 rounded-xl shadow p-5 transition">
+          <div class="text-purple-500 text-3xl mb-2">📊</div>
+          <h3 class="font-semibold text-lg">ANALYTICS</h3>
+          <p class="text-sm text-gray-500">Coming Soon!</p>
+        </button>
+
+        <!-- Create -->
+        <button class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl shadow p-5 transition">
+          <div class="text-3xl mb-2">➕</div>
+          <h3 class="font-semibold text-lg">CREATE</h3>
+          <p class="text-sm">Start</p>
+        </button>
+      </div>
+
+      <h4 class="mt-10 text-lg font-medium text-gray-700">Latest Activity</h4>
+    </main>
+
+    <script>
+      // Toggle side menu
+      const menuBtn = document.getElementById('menuBtn');
+      const sideMenu = document.getElementById('sideMenu');
+      menuBtn.addEventListener('click', () => {
+        sideMenu.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>
