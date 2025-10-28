@@ -114,7 +114,6 @@
 
   <!-- 🟨 Cards Grid Section -->
   <div class="grid grid-cols-2 gap-4 mt-10 max-w-sm">
-    <!-- Flashcards -->
     <a href="{{ url_for('banks') }}" class="bg-yellow-50 hover:bg-yellow-100 active:scale-95 rounded-xl shadow p-5 transition">
       <div class="text-yellow-500 text-3xl mb-2">📘</div>
       <h3 class="font-semibold text-lg">View Question Banks</h3>
@@ -122,11 +121,11 @@
     </a>
 
     <!-- Exams -->
-    <button class="bg-green-50 hover:bg-green-100 active:scale-95 rounded-xl shadow p-5 transition">
+    <a href="{{ url_for('flashcards') }}" class="bg-green-50 hover:bg-green-100 active:scale-95 rounded-xl shadow p-5 transition">
       <div class="text-green-500 text-3xl mb-2">❓</div>
-      <h3 class="font-semibold text-lg">EXAMS</h3>
+      <h3 class="font-semibold text-lg">Flashcards</h3>
       <p class="text-sm text-gray-500">Practice</p>
-    </button>
+    </a>
 
     <!-- Analytics -->
     <button class="bg-purple-50 hover:bg-purple-100 active:scale-95 rounded-xl shadow p-5 transition">

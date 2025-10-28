@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-6">
+  <h1 class="text-3xl font-bold mb-6">Flashcards</h1>
+
+  <!-- Create Form -->
+  <form action="/flashcards" method="POST" class="bg-white p-6 rounded-xl shadow-md w-full max-w-md mb-6">
+    <h2 class="text-lg font-semibold mb-3">Create a Flashcard</h2>
+    <input type="text" name="question" placeholder="Enter Question" required
+           class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200">
+    <textarea name="answer" placeholder="Enter Answer" required
+              class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200"></textarea>
+    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg w-full transition">
+      Add Flashcard
+    </button>
+  </form>
+
+  <!-- Flashcards List -->
+  <div class="grid gap-4 w-full max-w-md">
+    {% for card in cards %}
+      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+        <h3 class="font-semibold text-lg text-indigo-700">{{ card.question }}</h3>
+        <p class="text-gray-700 mt-1">{{ card.answer }}</p>
+      </div>
+    {% else %}
+      <p class="text-gray-500 text-center">No flashcards yet. Create one above!</p>
+    {% endfor %}
+  </div>
+
+  <a href="/" class="mt-8 text-indigo-500 hover:underline">← Back to Dashboard</a>
+</body>
+</html>
