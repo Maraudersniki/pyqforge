@@ -13,7 +13,6 @@
 
 
 <!-- Breadcrumb -->
-<!-- Light Mode Breadcrumb -->
 <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
   <ol class="inline-flex items-center space-x-1 md:space-x-2">
     <li class="inline-flex items-center">
@@ -91,147 +90,193 @@
     </div>
   </div>
 
-  <script>
-    const questionBanks = [
-      {
-        id: 1,
-        title: "Python Midterm 2024",
-        questions: [
-          { id: 1, section: "A", question: "What is Python?", has_answer: false },
-          { id: 2, section: "A", question: "Explain Flask architecture.", has_answer: true },
-          { id: 3, section: "B", question: "Differentiate list and tuple.", has_answer: false }
-        ]
-      }
-    ];
+<script>
+const questionBanks = [{{ banks_data | tojson }}];
 
-    const bankList = document.getElementById("bankList");
-    const questionsView = document.getElementById("questionsView");
-    const questionsTable = document.getElementById("questionsTable");
-    const bankTitle = document.getElementById("bankTitle");
-    const backBtn = document.getElementById("backBtn");
+const bankList = document.getElementById("bankList");
+const questionsView = document.getElementById("questionsView");
+const questionsTable = document.getElementById("questionsTable");
+const bankTitle = document.getElementById("bankTitle");
+const backBtn = document.getElementById("backBtn");
 
-    const modal = document.getElementById("answerModal");
-    const cancelBtn = document.getElementById("cancelBtn");
-    const saveBtn = document.getElementById("saveBtn");
-    const textMode = document.getElementById("textMode");
-    const imageMode = document.getElementById("imageMode");
-    const textEditor = document.getElementById("textEditor");
-    const imageUploader = document.getElementById("imageUploader");
-    const previewImg = document.getElementById("previewImg");
-    const answerImage = document.getElementById("answerImage");
+const modal = document.getElementById("answerModal");
+const cancelBtn = document.getElementById("cancelBtn");
+const saveBtn = document.getElementById("saveBtn");
+const textMode = document.getElementById("textMode");
+const imageMode = document.getElementById("imageMode");
+const textEditor = document.getElementById("textEditor");
+const imageUploader = document.getElementById("imageUploader");
+const previewImg = document.getElementById("previewImg");
+const answerImage = document.getElementById("answerImage");
 
-    let currentBank = null;
-    let currentQuestion = null;
+let currentBank = null;
+let currentQuestion = null;
 
-    function loadBanks() {
-      bankList.innerHTML = "";
-      questionsView.classList.add("hidden");
-      questionBanks.forEach(bank => {
-        const div = document.createElement("div");
-        div.className = "p-4 bg-white rounded-lg shadow-sm border cursor-pointer hover:bg-gray-50";
-        div.innerHTML = `
-          <h2 class="font-semibold text-lg">${bank.title}</h2>
-          <p class="text-sm text-gray-500">${bank.questions.length} questions</p>
-        `;
-        div.onclick = () => openBank(bank.id);
-        bankList.appendChild(div);
-      });
+// store answers in-memory (or localStorage for persistence)
+let savedAnswers = JSON.parse(localStorage.getItem("answers") || "{}");
+
+function loadBanks() {
+  bankList.innerHTML = "";
+  questionsView.classList.add("hidden");
+  questionBanks.forEach(bank => {
+    const div = document.createElement("div");
+    div.className = "p-4 bg-white rounded-lg shadow-sm border cursor-pointer hover:bg-gray-50";
+    div.innerHTML = `
+      <h2 class="font-semibold text-lg">${bank.title}</h2>
+      <p class="text-sm text-gray-500">${bank.questions.length} questions</p>
+    `;
+    div.onclick = () => openBank(bank.id);
+    bankList.appendChild(div);
+  });
+}
+
+function openBank(bankId) {
+  currentBank = questionBanks.find(b => b.id === bankId);
+  if (!currentBank) return;
+  bankList.classList.add("hidden");
+  questionsView.classList.remove("hidden");
+  bankTitle.textContent = currentBank.title;
+  renderQuestions(currentBank.questions);
+}
+
+function renderQuestions(questions) {
+  questionsTable.innerHTML = "";
+  let currentSection = "";
+  questions.forEach(q => {
+    if (q.section !== currentSection) {
+      currentSection = q.section;
+      const sectionRow = document.createElement("tr");
+      sectionRow.innerHTML = `
+        <td colspan="3" class="bg-blue-50 font-semibold px-4 py-2 text-blue-800">
+          ${q.section || 'General'}
+        </td>`;
+      questionsTable.appendChild(sectionRow);
     }
 
-    function openBank(bankId) {
-      currentBank = questionBanks.find(b => b.id === bankId);
-      if (!currentBank) return;
-      bankList.classList.add("hidden");
-      questionsView.classList.remove("hidden");
-      bankTitle.textContent = currentBank.title;
-      renderQuestions(currentBank.questions);
-    }
+    const hasAnswer = savedAnswers[q.id];
+    const row = document.createElement("tr");
+    row.classList.add("border-t");
+    row.innerHTML = `
+      <td class="px-4 py-2">${q.section}</td>
+      <td class="px-4 py-2" id="question-${q.id}">
+        ${q.question}
+      </td>
+      <td class="px-4 py-2 space-x-2">
+        <button onclick="editQuestion(${q.id})" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">Edit</button>
+        <button onclick="openAnswerModal(${q.id})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Upload Answer</button>
+        ${hasAnswer ? `<button onclick="viewAnswer(${q.id})" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">View Answer</button>` : ""}
+      </td>
+    `;
+    questionsTable.appendChild(row);
+  });
+}
 
-    function renderQuestions(questions) {
-      questionsTable.innerHTML = "";
-      let currentSection = "";
-      questions.forEach(q => {
-        if (q.section !== currentSection) {
-          currentSection = q.section;
-          const sectionRow = document.createElement("tr");
-          sectionRow.innerHTML = `<td colspan="3" class="bg-blue-50 font-semibold px-4 py-2 text-blue-800">Section ${q.section}</td>`;
-          questionsTable.appendChild(sectionRow);
-        }
 
-        const row = document.createElement("tr");
-        row.classList.add("border-t");
-        row.innerHTML = `
-          <td class="px-4 py-2">${q.section}</td>
-          <td class="px-4 py-2" id="question-${q.id}">${q.question}</td>
-          <td class="px-4 py-2 space-x-2">
-            <button onclick="editQuestion(${q.id})" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">Edit</button>
-            <button onclick="openAnswerModal(${q.id})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Upload Answer</button>
-            <button class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Generate AI Answer</button>
-          </td>
-        `;
-        questionsTable.appendChild(row);
-      });
-    }
+function editQuestion(id) {
+  const question = currentBank.questions.find(q => q.id === id);
+  const newText = prompt("Edit Question:", question.question);
+  if (newText) {
+    question.question = newText;
+    document.getElementById(`question-${id}`).innerText = newText;
+  }
+}
 
-    function editQuestion(id) {
-      const question = currentBank.questions.find(q => q.id === id);
-      const newText = prompt("Edit Question:", question.question);
-      if (newText) {
-        question.question = newText;
-        document.getElementById(`question-${id}`).innerText = newText;
-      }
-    }
+// Modal open
+function openAnswerModal(id) {
+  currentQuestion = id;
+  modal.classList.remove("hidden");
+  textEditor.classList.remove("hidden");
+  imageUploader.classList.add("hidden");
+  textMode.classList.add("bg-gray-100");
+  imageMode.classList.remove("bg-gray-100");
+  document.getElementById("answerText").value = "";
+  previewImg.classList.add("hidden");
+}
 
-    // Mini Editor Logic
-    function openAnswerModal(id) {
-      currentQuestion = id;
-      modal.classList.remove("hidden");
-      textEditor.classList.remove("hidden");
-      imageUploader.classList.add("hidden");
-      textMode.classList.add("bg-gray-100");
-      imageMode.classList.remove("bg-gray-100");
-    }
+cancelBtn.onclick = () => modal.classList.add("hidden");
 
-    cancelBtn.onclick = () => modal.classList.add("hidden");
+// Save Answer
+saveBtn.onclick = () => {
+  const answerText = document.getElementById("answerText").value.trim();
+  let answerData = { type: "text", content: "" };
 
-    saveBtn.onclick = () => {
-      alert("Answer saved (mock)!");
-      modal.classList.add("hidden");
+  if (!textEditor.classList.contains("hidden")) {
+    if (!answerText) return alert("Please enter an answer!");
+    answerData = { type: "text", content: answerText };
+  } else if (!imageUploader.classList.contains("hidden") && previewImg.src) {
+    answerData = { type: "image", content: previewImg.src };
+  } else {
+    return alert("Please add some content!");
+  }
+
+  savedAnswers[currentQuestion] = answerData;
+  localStorage.setItem("answers", JSON.stringify(savedAnswers));
+
+  alert("✅ Answer saved!");
+  modal.classList.add("hidden");
+  renderQuestions(currentBank.questions);
+};
+
+// Switch modes
+textMode.onclick = () => {
+  textEditor.classList.remove("hidden");
+  imageUploader.classList.add("hidden");
+  textMode.classList.add("bg-gray-100");
+  imageMode.classList.remove("bg-gray-100");
+};
+
+imageMode.onclick = () => {
+  textEditor.classList.add("hidden");
+  imageUploader.classList.remove("hidden");
+  imageMode.classList.add("bg-gray-100");
+  textMode.classList.remove("bg-gray-100");
+};
+
+answerImage.onchange = e => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      previewImg.src = reader.result;
+      previewImg.classList.remove("hidden");
     };
+    reader.readAsDataURL(file);
+  }
+};
 
-    textMode.onclick = () => {
-      textEditor.classList.remove("hidden");
-      imageUploader.classList.add("hidden");
-      textMode.classList.add("bg-gray-100");
-      imageMode.classList.remove("bg-gray-100");
-    };
+// View saved answer
+function viewAnswer(id) {
+  const ans = savedAnswers[id];
+  if (!ans) return alert("No answer found!");
 
-    imageMode.onclick = () => {
-      textEditor.classList.add("hidden");
-      imageUploader.classList.remove("hidden");
-      imageMode.classList.add("bg-gray-100");
-      textMode.classList.remove("bg-gray-100");
-    };
+  let content = ans.type === "text"
+    ? `<p class="whitespace-pre-line">${ans.content}</p>`
+    : `<img src="${ans.content}" class="max-w-full rounded border">`;
 
-    answerImage.onchange = e => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          previewImg.src = reader.result;
-          previewImg.classList.remove("hidden");
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+  const answerView = document.createElement("div");
+  answerView.className = "fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50";
+  answerView.innerHTML = `
+    <div class="bg-white w-11/12 md:w-1/2 p-6 rounded-lg shadow-lg relative">
+      <h3 class="text-lg font-semibold mb-4">Saved Answer</h3>
+      <div>${content}</div>
+      <div class="text-right mt-4">
+        <button class="bg-gray-300 hover:bg-gray-400 px-4 py-1 rounded" id="closeView">Close</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(answerView);
+  document.getElementById("closeView").onclick = () => answerView.remove();
+}
 
-    backBtn.onclick = () => {
-      bankList.classList.remove("hidden");
-      questionsView.classList.add("hidden");
-    };
+backBtn.onclick = () => {
+  bankList.classList.remove("hidden");
+  questionsView.classList.add("hidden");
+};
 
-    loadBanks();
-  </script>
+loadBanks();
+</script>
+
+<a href="{{ url_for('dashboard') }}" class="mt-8 text-indigo-500 hover:underline">← Back to Dashboard</a>
 
 </body>
 </html>

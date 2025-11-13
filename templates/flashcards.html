@@ -1,37 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Flashcards</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYQFORGE</title>
+    <!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center p-6">
-  <h1 class="text-3xl font-bold mb-6">Flashcards</h1>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center relative">
 
-  <!-- Create Form -->
-  <form action="/flashcards" method="POST" class="bg-white p-6 rounded-xl shadow-md w-full max-w-md mb-6">
-    <h2 class="text-lg font-semibold mb-3">Create a Flashcard</h2>
-    <input type="text" name="question" placeholder="Enter Question" required
-           class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200">
-    <textarea name="answer" placeholder="Enter Answer" required
-              class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200"></textarea>
-    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg w-full transition">
-      Add Flashcard
-    </button>
-  </form>
+  <!-- Breadcrumb (top-left) -->
+  <nav class="absolute top-4 left-4 flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 shadow-sm"
+       aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2">
+      <li class="inline-flex items-center">
+        <a href="{{ url_for('index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+          <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+          </svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="block w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+          </svg>
+          <a href="{{ url_for('dashboard') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2">Dashboard</a>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <svg class="w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+          </svg>
+          <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2">Upload Question</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+ <br>
+ <br>
+  <!-- Flashcards centered section -->
+  <div class="flex flex-col items-center w-full max-w-md text-center">
+    <h1 class="text-3xl font-bold mb-6">Flashcards</h1>
 
-  <!-- Flashcards List -->
-  <div class="grid gap-4 w-full max-w-md">
-    {% for card in cards %}
-      <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
-        <h3 class="font-semibold text-lg text-indigo-700">{{ card.question }}</h3>
-        <p class="text-gray-700 mt-1">{{ card.answer }}</p>
-      </div>
-    {% else %}
-      <p class="text-gray-500 text-center">No flashcards yet. Create one above!</p>
-    {% endfor %}
+    <!-- Create Form -->
+    <form action="/flashcards" method="POST" class="bg-white p-6 rounded-xl shadow-md w-full mb-6">
+      <h2 class="text-lg font-semibold mb-3">Create a Flashcard</h2>
+      <input type="text" name="question" placeholder="Enter Question" required
+             class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200">
+      <textarea name="answer" placeholder="Enter Answer" required
+                class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:ring focus:ring-indigo-200"></textarea>
+      <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg w-full transition">
+        Add Flashcard
+      </button>
+    </form>
+
+    <!-- Flashcards List -->
+    <div class="grid gap-4 w-full">
+      {% for card in cards %}
+        <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+          <h3
+            class="font-semibold text-lg text-indigo-700 cursor-pointer flex items-center justify-between"
+            onclick="toggleAnswer(this)"
+          >
+            {{ card.question }}
+            <span class="text-sm text-gray-500 ml-2">(click to view answer)</span>
+          </h3>
+          <p class="text-gray-700 mt-2 hidden">{{ card.answer }}</p>
+        </div>
+      {% else %}
+        <p class="text-gray-500 text-center">No flashcards yet. Create one above!</p>
+      {% endfor %}
+    </div>
+
+    <a href="{{ url_for('dashboard') }}" class="mt-8 text-indigo-500 hover:underline">← Back to Dashboard</a>
   </div>
 
-  <a href="/" class="mt-8 text-indigo-500 hover:underline">← Back to Dashboard</a>
+  <script>
+    function toggleAnswer(element) {
+      const answer = element.nextElementSibling;
+      if (!answer) return;
+      answer.classList.toggle('hidden');
+    }
+  </script>
+
 </body>
+
 </html>

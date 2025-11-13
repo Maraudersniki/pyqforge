@@ -111,35 +111,40 @@
                 <p class="text-gray-600 text-lg mb-8">Your Exam companion and question bank builder.</p>
                <div>
                <div>
-  <button
-    id="start-session-btn"
-    onclick="window.location.href='{{ url_for('upload') }}'"
-    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-150 transform hover:scale-105">
-    Try Without Login
-  </button>
-  <br><br>
-  <p class="text-sm text-gray-500">or</p>
-  <br>
-  <button
-    onclick="openLoginModal()"
-    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-full transition duration-150 hover:scale-105">
-    Log In / Sign Up
-  </button>
+ <!-- SIGNUP BUTTON -->
+<button
+  id="start-session-btn"
+  onclick="window.location.href='{{ url_for('signup') }}'"
+  class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-150 transform hover:scale-105">
+  Sign Up
+</button>
+
+<br><br>
+<p class="text-sm text-gray-500">or</p>
+<br>
+
+<!-- LOGIN BUTTON -->
+<button
+  onclick="openLoginModal()"
+  class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-full transition duration-150 hover:scale-105">
+  Log In
+</button>
 </div>
 
 <!-- LOGIN POPUP -->
 <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white rounded-xl shadow-lg p-8 w-[90%] max-w-sm text-center relative">
     <button onclick="closeLoginModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl">&times;</button>
-    
-    <h3 class="text-2xl font-bold text-indigo-700 mb-6">Login / Sign Up</h3>
+
+    <h3 class="text-2xl font-bold text-indigo-700 mb-6">Login</h3>
 
     <form action="{{ url_for('login') }}" method="POST">
       <input name="username" type="text" placeholder="Enter Username"
         class="border border-gray-300 rounded-lg w-full p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
 
-      <input name="password" type="password" placeholder="Enter Password"
-        class="border border-gray-300 rounded-lg w-full p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+      <input type="password" name="password" id="password" minlength="8" required
+        class="border border-gray-300 rounded-lg w-full p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        placeholder="Enter Password">
 
       <button type="submit"
         class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-full transition w-full mb-2">
@@ -148,12 +153,11 @@
     </form>
 
     <p class="text-sm text-gray-500 mt-2">
-      Don’t have an account? 
+      Don’t have an account?
       <span class="text-indigo-600 font-semibold cursor-pointer" onclick="handleSignup()">Sign Up</span>
     </p>
   </div>
 </div>
-
 
     </main>
 
@@ -165,15 +169,17 @@
         </div>
     </footer>
 
-    <script>
+<script>
   function openLoginModal() {
-    document.getElementById("login-modal").classList.remove("hidden");
+    document.getElementById('login-modal').classList.remove('hidden');
   }
+
   function closeLoginModal() {
-    document.getElementById("login-modal").classList.add("hidden");
+    document.getElementById('login-modal').classList.add('hidden');
   }
+
   function handleSignup() {
-    alert("Signup functionality coming soon!");
+    window.location.href = "{{ url_for('signup') }}";
   }
 </script>
 
